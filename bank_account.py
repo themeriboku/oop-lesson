@@ -1,3 +1,39 @@
+class AccountDB:
+    def __init__(self):
+        self.account_database = []
+
+    def insert(self, account):
+        index = self.__search_private(account.account_number)
+        if index == -1:
+            self.account_database.append(account)
+        else:
+            print(account, "Duplicated account; nothing to be insert")
+    
+    def __search_private(self, account_num):
+        for i in range(len(self.account_database)):
+            if self.account_database[i].account_number == account_num:
+                return i
+        return -1
+    
+    def search_public(self, account_num):
+        for account in self.account_database:
+            if account.account_number == account_num:
+                return account
+        return None
+    
+    def delete(self, account_num):
+        index = self.__search_private(account_num)
+        if index != -1:
+            del self.account_database[index]
+            return True
+        return False
+    
+    def __str__(self):
+        s = ''
+        for account in self.account_database:
+            s += str(account) + ", "
+        return s
+
 class Account:
     def __init__(self, num, type, account_name, balance):
         self.account_number = num
@@ -16,15 +52,42 @@ class Account:
         return '{' + str(self.account_number) + ',' + str(self.type) + ',' + str(self.account_name) + ',' + str(self.balance) + '}'
 
 
-account1 = Account("0000", "saving", "David Patterson", 1000)
-account2 = Account("0001", "checking", "John Hennessy", 2000)
-account3 = Account("0003", "saving", "Mark Hill", 3000)
-account4 = Account("0004", "saving", "David Wood", 4000)
-account5 = Account("0004", "saving", "David Wood", 4000)
-print(account1)
-account1.deposit(1000)
-account2.withdraw(200)
-print(account2)
-print(account3)
-print(account4)
-print(account5)
+def test_delete_method():
+    # Create an account database
+    account_db = AccountDB()
+    
+    # Create some accounts
+    account1 = Account(101, "Saving", "Alice", 1000)
+    account2 = Account(102, "Checking", "Bob", 1500)
+    account3 = Account(103, "Saving", "Charlie", 2000)
+    
+    # Insert accounts into the database
+    account_db.insert(account1)
+    account_db.insert(account2)
+    account_db.insert(account3)
+    
+    print("Initial database:")
+    print(account_db)
+
+    # Delete account with account number 102
+    success = account_db.delete(102)
+    if success:
+        print("Account 102 deleted successfully.")
+    else:
+        print("Account 102 not found.")
+    
+    print("Database after deleting account 102:")
+    print(account_db)
+
+    # Try to delete an account that does not exist
+    success = account_db.delete(999)
+    if success:
+        print("Account 999 deleted successfully.")
+    else:
+        print("Account 999 not found.")
+    
+    print("Final database:")
+    print(account_db)
+
+# Run the test
+test_delete_method()
