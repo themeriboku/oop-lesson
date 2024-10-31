@@ -70,3 +70,35 @@ class Table:
 
     def __str__(self):
         return self.table_name + ':' + str(self.table)
+
+db = DB()
+
+cities_table = Table('Cities', cities)
+countries_table = Table('Countries', countries)
+
+db.insert(cities_table)
+db.insert(countries_table)
+
+joined_table = cities_table.join(countries_table, 'country')
+eu_no_coastline_cities = joined_table.filter(lambda x: x['EU'] == 'yes' and x['coastline'] == 'no')
+min_temp = eu_no_coastline_cities.aggregate(min, 'temperature')
+max_temp = eu_no_coastline_cities.aggregate(max, 'temperature')
+
+print(f"Min temperature for cities in the EU without coastlines: {min_temp}")
+print(f"Max temperature for cities in the EU without coastlines: {max_temp}")
+
+countries_with_cities = cities_table.select(['country', 'latitude'])
+
+country_latitudes = {}
+
+for item in countries_with_cities:
+    country = item['country']
+    latitude = float(item['latitude'])
+    if country not in country_latitudes:
+        country_latitudes[country] = []
+    country_latitudes[country].append(latitude)
+
+for country, latitudes in country_latitudes.items():
+    min_lat = min(latitudes)
+    max_lat = max(latitudes)
+    print(f"{country}: Min latitude = {min_lat}, Max latitude = {max_lat}")
