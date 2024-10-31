@@ -52,16 +52,13 @@ class Account:
         return '{' + str(self.account_number) + ',' + str(self.type) + ',' + str(self.account_name) + ',' + str(self.balance) + '}'
 
 
-def test_delete_method():
-    # Create an account database
+def test_delete_method():   
     account_db = AccountDB()
     
-    # Create some accounts
     account1 = Account(101, "Saving", "Alice", 1000)
     account2 = Account(102, "Checking", "Bob", 1500)
     account3 = Account(103, "Saving", "Charlie", 2000)
     
-    # Insert accounts into the database
     account_db.insert(account1)
     account_db.insert(account2)
     account_db.insert(account3)
@@ -69,7 +66,6 @@ def test_delete_method():
     print("Initial database:")
     print(account_db)
 
-    # Delete account with account number 102
     success = account_db.delete(102)
     if success:
         print("Account 102 deleted successfully.")
@@ -79,7 +75,6 @@ def test_delete_method():
     print("Database after deleting account 102:")
     print(account_db)
 
-    # Try to delete an account that does not exist
     success = account_db.delete(999)
     if success:
         print("Account 999 deleted successfully.")
@@ -89,5 +84,4 @@ def test_delete_method():
     print("Final database:")
     print(account_db)
 
-# Run the test
 test_delete_method()
