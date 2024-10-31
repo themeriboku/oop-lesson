@@ -16,7 +16,7 @@ with open(os.path.join(__location__, 'Countries.csv')) as f:
     for r in rows:
         countries.append(dict(r))
 
-class DB:
+class TableDB:
     def __init__(self):
         self.database = []
 
@@ -71,7 +71,7 @@ class Table:
     def __str__(self):
         return self.table_name + ':' + str(self.table)
 
-db = DB()
+db = TableDB()
 
 cities_table = Table('Cities', cities)
 countries_table = Table('Countries', countries)
